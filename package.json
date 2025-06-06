@@ -1,0 +1,20 @@
+{
+  "name": "zerodha_inspired",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silent-knight19/zerodha_Inspired.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silent-knight19/zerodha_Inspired/issues"
+  },
+  "homepage": "https://github.com/silent-knight19/zerodha_Inspired#readme",
+  "description": ""
+}
