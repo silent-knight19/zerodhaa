@@ -16,6 +16,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
 // app.get("/addpositions", (req, res) => {
 //    let tempPositions = [
 //     {
@@ -190,29 +196,55 @@ app.use(bodyParser.json());
 //     }
 // });
 app.post("/newOrder", async (req, res) => {
-    let newOrder = new OrdersModel({
-     name: req.body.name,
-        qty: req.body.qty,
-        avg: req.body.avg,
-        price: req.body.price,
-       mode: req.body.mode,
-    });
-    newOrder.save();
-    res.send("Order added successfully");
+    try {
+        let newOrder = new OrdersModel({
+            name: req.body.name,
+            qty: req.body.qty,
+            avg: req.body.avg,
+            price: req.body.price,
+            mode: req.body.mode,
+        });
+        await newOrder.save();
+        res.status(201).json({ message: "Order added successfully" });
+    } catch (error) {
+        console.error("Error adding order:", error);
+        res.status(500).json({ error: "Failed to add order" });
+    }
 });
 
 app.get("/allHoldings", async (req, res) => {
-    let allHoldings = await HoldingsModel.find();
-    res.json(allHoldings);
+    try {
+        let allHoldings = await HoldingsModel.find();
+        res.json(allHoldings);
+    } catch (error) {
+        console.error("Error fetching holdings:", error);
+        res.status(500).json({ error: "Failed to fetch holdings" });
+    }
 });
 
-    app.get("/allPositions", async (req, res) => {
+app.get("/allPositions", async (req, res) => {
+    try {
         let allPositions = await PositionsModel.find();
         res.json(allPositions);
+    } catch (error) {
+        console.error("Error fetching positions:", error);
+        res.status(500).json({ error: "Failed to fetch positions" });
+    }
 });
 
-app.listen(PORT, async () => {
-  console.log("server is running");
-  mongoose.connect(MONGO_URI);
-  console.log("connected to mongo");
-});
+// Database connection and server start
+const startServer = async () => {
+    try {
+        await mongoose.connect(MONGO_URI);
+        console.log("Connected to MongoDB");
+        
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to connect to MongoDB:", error);
+        process.exit(1);
+    }
+};
+
+startServer();
