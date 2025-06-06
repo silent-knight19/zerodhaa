@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-const { OrderModel } = require("./model/OrderModel");
+const { OrdersModel } = require("./model/OrdersModel");
 const { HoldingsModel  } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
 
@@ -190,7 +190,7 @@ app.use(bodyParser.json());
 //     }
 // });
 app.post("/newOrder", async (req, res) => {
-    let newOrder = new OrderModel({
+    let newOrder = new OrdersModel({
      name: req.body.name,
         qty: req.body.qty,
         avg: req.body.avg,
